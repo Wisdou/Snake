@@ -13,18 +13,18 @@ namespace Snake
 {
     public partial class Snake : UserControl, IMessageFilter
     {
-        public mainForm homeForm { get; set; }
-        SnakePlayer Player1;
-        FoodManager FoodMngr;
+        public MainForm homeForm { get; set; }
+        SnakePlayer player;
+        FoodManager foodManager;
         Random r = new Random();
         private int score = 0;
         public Snake()
         {
             InitializeComponent();
             Application.AddMessageFilter(this);
-            Player1 = new SnakePlayer(this);
-            FoodMngr = new FoodManager(GameCanvas.Width, GameCanvas.Height);
-            FoodMngr.AddRandomFood(10);
+            player = new SnakePlayer(this);
+            foodManager = new FoodManager(GameCanvas.Width, GameCanvas.Height);
+            foodManager.AddRandomFood(10);
             ScoreTxtBox.Text = score.ToString();
         }
 
@@ -38,55 +38,52 @@ namespace Snake
             homeForm.Show();
             homeForm.GameOver();
 
-            Player1 = new SnakePlayer(this);
-            FoodMngr = new FoodManager(GameCanvas.Width, GameCanvas.Height);
-            FoodMngr.AddRandomFood(10);
+            player = new SnakePlayer(this);
+            foodManager = new FoodManager(GameCanvas.Width, GameCanvas.Height);
+            foodManager.AddRandomFood(10);
             score = 0;
         }
 
         public bool PreFilterMessage(ref Message msg)
         {
-            if (msg.Msg == 0x0101) //KeyUp
-                Input.SetKey((Keys)msg.WParam, false);
+            Console.WriteLine((Keys)0x0101 == Keys.Up);
             return false;
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            if (msg.Msg == 0x100) //KeyDown
-                Input.SetKey((Keys)msg.WParam, true);
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
-        private void GameCanvas_Paint(object sender, PaintEventArgs e)
+        private void GameCanvasPaint(object sender, PaintEventArgs e)
         {
             Graphics canvas = e.Graphics;
-            Player1.Draw(canvas);
-            FoodMngr.Draw(canvas);
+            player.Draw(canvas);
+            foodManager.Draw(canvas);
         }
 
         private void CheckForCollisions()
         {
-            if (Player1.IsIntersectingRect(new Rectangle(-100, 0, 100, GameCanvas.Height)))
-                Player1.OnHitWall(Direction.Left);
+            if (player.IsIntersectingRect(new Rectangle(-100, 0, 100, GameCanvas.Height)))
+                player.OnHitWall(Direction.Left);
 
-            if (Player1.IsIntersectingRect(new Rectangle(0, -100, GameCanvas.Width, 100)))
-                Player1.OnHitWall(Direction.Up);
+            if (player.IsIntersectingRect(new Rectangle(0, -100, GameCanvas.Width, 100)))
+                player.OnHitWall(Direction.Up);
 
-            if (Player1.IsIntersectingRect(new Rectangle(GameCanvas.Width, 0, 100, GameCanvas.Height)))
-                Player1.OnHitWall(Direction.Right);
+            if (player.IsIntersectingRect(new Rectangle(GameCanvas.Width, 0, 100, GameCanvas.Height)))
+                player.OnHitWall(Direction.Right);
 
-            if (Player1.IsIntersectingRect(new Rectangle(0, GameCanvas.Height, GameCanvas.Width, 100)))
-                Player1.OnHitWall(Direction.Down);
+            if (player.IsIntersectingRect(new Rectangle(0, GameCanvas.Height, GameCanvas.Width, 100)))
+                player.OnHitWall(Direction.Down);
 
             //Is hitting food
-            List<Rectangle> SnakeRects = Player1.GetRects();
+            List<Rectangle> SnakeRects = player.GetRects();
             foreach (Rectangle rect in SnakeRects)
             {
-                if (FoodMngr.IsIntersectingRect(rect, true))
+                if (foodManager.IsIntersectingRect(rect, true))
                 {
-                    FoodMngr.AddRandomFood();
-                    Player1.AddBodySegments(1);
+                    foodManager.AddRandomFood();
+                    player.AddBodySegments(1);
                     score++;
                     ScoreTxtBox.Text = score.ToString();
                 }
@@ -95,23 +92,23 @@ namespace Snake
 
         private void SetPlayerMovement()
         {
-            if (Input.IsKeyDown(Keys.Left) || Input.IsKeyDown(Keys.A))
-            {
-                Player1.SetDirection(Direction.Left);
-            }
-            else if (Input.IsKeyDown(Keys.Right) || Input.IsKeyDown(Keys.D))
-            {
-                Player1.SetDirection(Direction.Right);
-            }
-            else if (Input.IsKeyDown(Keys.Up) || Input.IsKeyDown(Keys.W))
-            {
-                Player1.SetDirection(Direction.Up);
-            }
-            else if (Input.IsKeyDown(Keys.Down) || Input.IsKeyDown(Keys.S))
-            {
-                Player1.SetDirection(Direction.Down);
-            }
-            Player1.MovePlayer();
+            //if (Input.IsKeyDown(Keys.Left) || Input.IsKeyDown(Keys.A))
+            //{
+            //    player.SetDirection(Direction.Left);
+            //}
+            //else if (Input.IsKeyDown(Keys.Right) || Input.IsKeyDown(Keys.D))
+            //{
+            //    player.SetDirection(Direction.Right);
+            //}
+            //else if (Input.IsKeyDown(Keys.Up) || Input.IsKeyDown(Keys.W))
+            //{
+            //    player.SetDirection(Direction.Up);
+            //}
+            //else if (Input.IsKeyDown(Keys.Down) || Input.IsKeyDown(Keys.S))
+            //{
+            //    player.SetDirection(Direction.Down);
+            //}
+            player.MovePlayer();
         }
 
         private void GameTimer_Tick(object sender, EventArgs e)
@@ -121,28 +118,28 @@ namespace Snake
             GameCanvas.Invalidate();
         }
 
-        private void Start_Btn_Click(object sender, EventArgs e)
+        private void StartButtonClick(object sender, EventArgs e)
         {
             ToggleTimer();
         }
 
-        private void DareBtn_Click(object sender, EventArgs e)
+        private void HowDareYouButtonClick(object sender, EventArgs e)
         {
             int index = r.Next(4);
             switch (index)
             {
                 case 0:
-                    lbl_Game.Text = "How dare you listen!";
+                    howDareYouLabel.Text = "How dare you listen!";
                     break;
                 case 1:
-                    lbl_Game.Text = "This is a dark path you are on!";
+                    howDareYouLabel.Text = "This is a dark path you are on!";
                     break;
                 case 2:
-                    lbl_Game.Text = "I knew you wouldn't listen!";
+                    howDareYouLabel.Text = "I knew you wouldn't listen!";
                     break;
                 case 3:
-                    lbl_Game.Text = "Have some food!!!!!!!!!!  :)";
-                    FoodMngr.AddRandomFood(20);
+                    howDareYouLabel.Text = "Have some food!!!!!!!!!!  :)";
+                    foodManager.AddRandomFood(20);
                     GameCanvas.Invalidate();
                     break;
                 default:
@@ -156,6 +153,28 @@ namespace Snake
         {
             homeForm.Show();
             homeForm.Home();
+        }
+
+        public void Snake_KeyDown(object sender, KeyEventArgs e)
+        {
+            Keys code = e.KeyCode;
+            lineText.Text = "Apple";
+            if (code == Keys.Left || code == Keys.A)
+            {
+                player.SetDirection(Direction.Left);
+            }
+            else if (code == Keys.Right || code == Keys.D)
+            {
+                player.SetDirection(Direction.Right);
+            }
+            else if (code == Keys.Up || code == Keys.W)
+            {
+                player.SetDirection(Direction.Up);
+            }
+            else if (code == Keys.Down || code == Keys.S)
+            {
+                player.SetDirection(Direction.Down);
+            }
         }
     }
 }

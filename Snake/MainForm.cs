@@ -10,14 +10,14 @@ using System.Windows.Forms;
 
 namespace Snake
 {
-    public partial class mainForm : Form
+    public partial class MainForm : Form
     {
         HomeUC homeUC = new HomeUC();
         readonly Snake gameUC = new Snake();
         readonly TutorialUC tutorialUC = new TutorialUC();
         readonly GameOverUC gameOverUC = new GameOverUC();
 
-        public mainForm()
+        public MainForm()
         {
             InitializeComponent();
             Home();
@@ -25,6 +25,8 @@ namespace Snake
             gameUC.homeForm = this;
             tutorialUC.homeForm = this;
             gameOverUC.homeForm = this;
+            KeyPreview = true;
+            KeyDown += gameUC.Snake_KeyDown;
         }
 
         internal void Home()
