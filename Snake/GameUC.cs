@@ -64,6 +64,23 @@ namespace Snake
             foodManager.Draw(canvas);
         }
 
+        private int GetScore()
+        {
+            var difficulty = this.difficultyComboBox.Text;
+            switch (difficulty)
+            {
+                case "Easy":
+                    return 1;
+                case "Medium":
+                    return 3;
+                case "Hard":
+                    return 5;
+                case "Master":
+                    return 10;
+                default:
+                    return 0;
+            }
+        }
         private void CheckForCollisions()
         {
             if (player.IsIntersectingRect(new Rectangle(-100, 0, 100, GameCanvas.Height)))
@@ -86,7 +103,7 @@ namespace Snake
                 {
                     foodManager.AddRandomFood();
                     player.AddBodySegments(1);
-                    score++;
+                    score += GetScore();
                     ScoreTxtBox.Text = score.ToString();
                 }
             }

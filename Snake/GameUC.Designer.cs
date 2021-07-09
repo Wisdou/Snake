@@ -38,9 +38,7 @@
             this.btn_Home = new System.Windows.Forms.Button();
             this.howDareYouLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-
             this.difficultyComboBox = new System.Windows.Forms.ComboBox();
-
             ((System.ComponentModel.ISupportInitialize)(this.GameCanvas)).BeginInit();
             this.SuspendLayout();
             // 
@@ -145,6 +143,7 @@
             // 
             // difficultyComboBox
             // 
+            this.difficultyComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.difficultyComboBox.FormattingEnabled = true;
             this.difficultyComboBox.Items.AddRange(new object[] {
             "Easy",
@@ -155,7 +154,6 @@
             this.difficultyComboBox.Name = "difficultyComboBox";
             this.difficultyComboBox.Size = new System.Drawing.Size(193, 24);
             this.difficultyComboBox.TabIndex = 8;
-            this.difficultyComboBox.Text = "Easy";
             this.difficultyComboBox.SelectedIndexChanged += new System.EventHandler(this.difficultyComboBox_SelectedIndexChanged);
             // 
             // Snake
@@ -164,7 +162,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.Black;
-
             this.Controls.Add(this.difficultyComboBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.howDareYouLabel);
