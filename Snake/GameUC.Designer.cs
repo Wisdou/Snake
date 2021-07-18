@@ -154,6 +154,7 @@
             this.difficultyComboBox.Name = "difficultyComboBox";
             this.difficultyComboBox.Size = new System.Drawing.Size(193, 24);
             this.difficultyComboBox.TabIndex = 8;
+            this.difficultyComboBox.Text = "Easy";
             this.difficultyComboBox.SelectedIndexChanged += new System.EventHandler(this.difficultyComboBox_SelectedIndexChanged);
             // 
             // Snake
